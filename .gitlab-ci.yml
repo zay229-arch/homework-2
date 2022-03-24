@@ -1,0 +1,7 @@
+image: "gcc:latest"
+
+test:gcc:
+  script:
+  - gcc --version
+  - make test
+  - ./build/bin/release/test

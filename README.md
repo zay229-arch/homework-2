@@ -1,92 +1,149 @@
-# Homework 5
+# CSE 109 - Systems Software - Spring 2022 - Homework 5
 
+**Due Date: 4/4/2022 EOD**
 
+## Instructions 
 
-## Getting started
+**Read thoroughly before starting your project:**
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+1. Fork this repository into your CSE109 project namespace. [Instructions](https://docs.gitlab.com/ee/workflow/forking_workflow.html#creating-a-fork)
+2. Clone your newly forked repository onto your development machine. [Instructions](https://docs.gitlab.com/ee/gitlab-basics/start-using-git.html#clone-a-repository) 
+3. As you are writing code you should commit patches along the way. *i.e.* don't just submit all your code in one big commit when you're all done. Commit your progress as you work. **You should make at least one commit per function.**
+4. When you've committed all of your work, there's nothing left to do to submit the assignment.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## Assignment
 
-## Add your files
+There are two parts to this assignment. In Part 1, you will convert you linked list data structure that you implemented in Homework 4 from C to C++. In Part 2, you will implement a hash set in C++.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+## Part 1 - Linked List Conversion
 
+Convert your linked list data structure from Homework 4 to a C++ class. If you didn't successfully complete Homework 4, you can use the [posted solution](https://gitlab.com/lehigh-cse-109/spring-2021/assignments/homework-4/-/tree/solutions) as the basis for this part of the assignment. Your linked list class should be a template class so that it can hold items of any type. You should also convert your Node struct to a Node template class.
+
+The Node class should have the following methods:
+
+```c++
+template <class T>
+class Node {
+  public:
+    T item
+    linkedlist::Node<T>* next;
+    Node();
+    ~Node();
+};
 ```
-cd existing_repo
-git remote add origin http://gitlab.cse.lehigh.edu/cse109/spring-2022/assignments/homework-5.git
-git branch -M main
-git push -uf origin main
+
+You can add any other methods and fields necessary to make your Node work. You can implement these functions in a header file called `llnode.h` inside of the `lib` directory. Make sure they exist wihtin the `LinkedList` namespace though.
+
+The Linked List class should have the following methods:
+
+```c++
+template <class T>
+class LinkedList {
+  private:
+    linkedlist::Node<T>* head;
+    linkedlist::Node<T>* tail;
+  public:
+    size_t length;
+    LinkedList();
+    ~LinkedList();
+    size_t insertAtTail(T item);
+    size_t insertAtHead(T item);
+    size_t insertAtIndex(size_t index, T item);
+    T removeTail();
+    T removeHead();
+    T removeAtIndex(size_t index);
+};
 ```
 
-## Integrate with your tools
+You can add any other methods and fields necessary to make your LinkedList work. You can write all of this code in a header file called `linkedlist.h` inside of the lib directory. You should add some template implementations for common types, like `int`, `char`, etc. Write a Makefile inside of this directory that has the following directives:
 
-- [ ] [Set up project integrations](http://gitlab.cse.lehigh.edu/cse109/spring-2022/assignments/homework-5/-/settings/integrations)
+- static - build a static library `liblinkedlist.a`, put it in `lib/build/lib/release`. Put object files in `lib/build/objects`
+- shared - build a shared library `liblinkedlist.so`, put it in `lib/build/lib/release`. Put object files in `lib/build/objects`
+- debug - build a shared library with debug symbols, put it in `lib/build/lib/debug`. Put object files in `lib/build/objects`
+- clean - remove all build artifacts.
 
-## Collaborate with your team
+## Part 2 - Hash Set
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+In this part you will implement a hash set data structure in C++. The core of the hashset is an array of linked list pointers. The type of the table is a `LinkedList<T>**`. The first star indicates it's a pointer to an array, the second star indicates each array element holds a List pointer. The Hashset also holds its size, and the current load factor. The load factor will be recalculated on each insert, and if the value exceeds a threshold (70% filled buckets) then the underlying table array will be resized. This will involve allocating a new, larger array, rehashing all of the elements into this new array, then freeing the old array and its constituent linked lists.
 
-## Test and Deploy
+The Hashset struct is declared in `hashset.h`, along with a number of functions you will need to implement.
 
-Use the built-in continuous integration in GitLab.
+```c++
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+template <class T>
+class HashSet {
+  private:
+    // The backbone of the hash set. This is an array of Linked List pointers.
+    LinkedList<T>** array;
 
-***
+    // The number of buckets in the array
+    size_t size; 
 
-# Editing this README
+    // Generate a prehash for an item with a given size
+    unsigned long prehash(T item);
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+  public:
+    // Initialize an empty hash set, where size is the number of buckets in the array
+    HashSet(size_t size);
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+    // Free all memory allocated by the hash set
+    ~HashSet();
 
-## Name
-Choose a self-explaining name for your project.
+    // Hash an unsigned long into an index that fits into a hash set
+    unsigned long hash(T item);
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+    // Insert item in the set. Return true if the item was inserted, false if it wasn't (i.e. it was already in the set)
+    // Recalculate the load factor after each successful insert (round to nearest whole number).
+    // If the load factor exceeds 70 after insert, resize the table to hold twice the number of buckets.
+    bool insert(T item);
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+    // Remove an item from the set. Return true if it was removed, false if it wasn't (i.e. it wasn't in the set to begin with)
+    bool remove(T item);
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+    // Return true if the item exists in the set, false otherwise
+    bool contains(T item);
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+    // Resize the underlying table to the given size. Recalculate the load factor after resize
+    void resize(size_t new_size);
+
+    // Returns the number of items in the hash set
+    size_t len();
+
+    // Returns the number of buckets that can be filled before reallocating
+    size_t capacity();
+
+    // Print Table. You can do this in a way that helps you implement your hash set.
+    void print();
+
+};
+```
+
+You should add some template implementations for common types, like `int`, `char`, etc. Write a Makefile inside of the project root that has the following directives:
+
+- static - build a static library `libhashset.a`, put it in `build/lib/release`. Put object files in `build/objects`
+- shared - build a shared library `libhashset.so`, put it in `build/lib/release`. Put object files in `build/objects`
+- debug - build a shared library with debug symbols, put it in `build/lib/debug`. Put object files in `build/objects`
+- clean - remove all build artifacts.
+- install - move the shared library to `/usr/lib`
+
+## Build Instructions
+
+Write build instructions here. Explain to the user all the steps necessary to build this project including:
+
+- What software (including versions) are needed?
+- What system architectures and operating systems are supported?
+- What commands need to be entered to build the project?
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Write usage instructions here. Explain to the user how they can integrate your library into their project. Usage instructions might include:
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+- What the user should #include into their project and where.
+- An example command of how the user might build their project to link to your library.
+- How to create a hash set using your library.
+- How to use the hash set.
+- How to clean up the hash set to avoid leaking memory.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+## Examples
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Write two examples demonstrating how to use your hash set library. These example should be complete in the sense that the user can just copy and paste them into their code and everything should work as long as they follow the build and usage instructions you gave them.
