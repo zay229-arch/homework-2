@@ -1,4 +1,6 @@
-# CSE 109 - Systems Software - Spring 2022 - Homework 5
+# CSE 109 - Systems Software - Fall 2022
+
+# Homework 6
 
 **Due Date: 10/24/2022 EOD**
 
