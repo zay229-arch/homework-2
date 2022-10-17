@@ -19,7 +19,7 @@ There are two parts to this assignment. In Part 1, you will convert you linked l
 
 ## Part 1 - Linked List Conversion
 
-Convert your linked list data structure from Homework 4 to a C++ class. If you didn't successfully complete Homework 5, you can use the [posted solution](https://gitlab.com/lehigh-cse-109/spring-2021/assignments/homework-4/-/tree/solutions) as the basis for this part of the assignment. Your linked list class should be a template class so that it can hold items of any type. You should also convert your Node struct to a Node template class.
+Convert your linked list data structure from Homework 5 to a C++ class. If you didn't successfully complete Homework 5, you can use the [posted solution](https://gitlab.com/lehigh-cse-109/spring-2021/assignments/homework-4/-/tree/solutions) as the basis for this part of the assignment. Your linked list class should be a template class so that it can hold items of any type. You should also convert your Node struct to a Node template class.
 
 The Node class should have the following methods:
 
