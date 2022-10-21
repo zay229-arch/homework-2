@@ -34,7 +34,7 @@ class Node {
 };
 ```
 
-You can add any other methods and fields necessary to make your Node work. You can implement these functions in a header file called `llnode.h` inside of the `lib` directory. Make sure they exist wihtin the `LinkedList` namespace though.
+You can add any other methods and fields necessary to make your Node work. You can implement these functions in a header file called `llnode.h` inside of the `lib` directory. Make sure they exist wihtin the `linkedlist` namespace though.
 
 The Linked List class should have the following methods:
 
