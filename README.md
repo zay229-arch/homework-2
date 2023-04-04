@@ -66,7 +66,7 @@ class HashSet {
 
 };
 ```
-Write a Makefile inside of the project root that has the following directives:
+Write a Makefile inside of the project root that has the following targets:
 
 - static - build a static library `libhashset.a`, put it in `build/lib/release`. Put object files in `build/objects`
 - shared - build a shared library `libhashset.so`, put it in `build/lib/release`. Put object files in `build/objects`
@@ -82,6 +82,8 @@ This is the oral portion of the homework. You will record an explanation for you
 - **Purpose and functionality of code:** Explain what your code does and how it works.
 
 - **Data structures:** Explain how the hash set data structure is implemented. How did you make use of the linked list?
+
+- **Makefile:** Explain your makefile and the various targets you were asked to write. 
 
 - **Code organization and style:** Explain how their code is organized and structured, and should discuss any design decisions they made. They should also discuss their coding style and any coding conventions they followed.
 
