@@ -96,6 +96,14 @@ You can use Zoom to do this, [here is a link](https://support.zoom.us/hc/en-us/a
 
 Paste Recording Link(s) Here:
 
+## Evaluation
+
+- Only files under vesion controll in your forked assignment repository will be graded. Local files left untracked on your computer will not be considered.
+
+- Only code committed *and pushed* prior to the time of grading will be accepted. Locally committed but unpushed code will not be considered.
+
+- Your assignment will be graded according to the [Programming Assignment Grading Rubric](https://drive.google.com/open?id=1V0nBt3Rz6uFMZ9mIaFioLF-48DFX0VdkbgRUDM_eIFk).
+
 ## Tips For Success 
 
 Some things to take into consideration when writing your assignment:
