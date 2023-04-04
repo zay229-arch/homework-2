@@ -66,6 +66,11 @@ class HashSet {
 
 };
 ```
+
+💡 Tip: Feel free to use your own linked list implementation, but don't use a standard library linked list.
+
+## Makefile
+
 Write a Makefile inside of the project root that has the following targets:
 
 - all - build static and shared libraries.
