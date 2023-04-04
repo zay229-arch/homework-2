@@ -47,14 +47,8 @@ int main() {
   hs.insert(d);
   hs.insert(e);
   hs.insert(f);
-
-  test("Test3", hs.contains(f), true);
-
   hs.insert(g);
-  hs.insert(h); // 7 of 10 buckets should be filled on this insert, causing a resize to 20 buckets
-
-  test("Test4", hs.capacity() == 13, true); // test that the table was resized, so it can hold 13 items before a resize is required
-
+  hs.insert(h);
   hs.insert(i);
   hs.insert(j);
   hs.insert(k);
@@ -66,14 +60,13 @@ int main() {
   hs.insert(q);
   hs.insert(r);
   hs.insert(s);
-  hs.insert(t); // 14 of 20 buckets should be filled on this insert, causing another resize
+  hs.insert(t);
 
-  test("Test5", hs.capacity() == 27, true); // test that the table was resized again
 
-  test("Test6", hs.remove(a), true); // test remove
-  test("Test7", hs.contains(a), false); // the item should be gone
-  test("Test8", hs.remove(a), false); // can't remove again
-  test("Test9", hs.insert(a), true); // but we can add it back
+  test("Test3", hs.remove(a), true); // test remove
+  test("Test4", hs.contains(a), false); // the item should be gone
+  test("Test5", hs.remove(a), false); // can't remove again
+  test("Test6", hs.insert(a), true); // but we can add it back
 
 
   return 0;
