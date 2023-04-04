@@ -68,6 +68,7 @@ class HashSet {
 ```
 Write a Makefile inside of the project root that has the following targets:
 
+- all - build static and shared libraries.
 - static - build a static library `libhashset.a`, put it in `build/lib/release`. Put object files in `build/objects`
 - shared - build a shared library `libhashset.so`, put it in `build/lib/release`. Put object files in `build/objects`
 - debug - build a shared library with debug symbols, put it in `build/lib/debug`. Put object files in `build/objects`
