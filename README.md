@@ -106,7 +106,7 @@ Paste Recording Link(s) Here:
 
 ## Evaluation
 
-- Only files under vesion controll in your forked assignment repository will be graded. Local files left untracked on your computer will not be considered.
+- Only files under version control in your forked assignment repository will be graded. Local files left untracked on your computer will not be considered.
 
 - Only code committed *and pushed* prior to the time of grading will be accepted. Locally committed but unpushed code will not be considered.
 
