@@ -94,7 +94,7 @@ This is the oral portion of the homework. You will record an explanation for you
 
 - **Makefile:** Explain your makefile and the various targets you were asked to write. 
 
-- **Code organization and style:** Explain how their code is organized and structured, and should discuss any design decisions they made. They should also discuss their coding style and any coding conventions they followed.
+- **Code organization and style:** Explain how your code is organized and structured, discuss any design decisions you made. You should also discuss your coding style and any coding conventions you followed.
 
 If you didn't finish the homework in is entirety, explain how you attempted to solve it and where you got stuck. This will get you at least some points. 
 
