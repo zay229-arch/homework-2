@@ -14,7 +14,7 @@ int test(char* label, bool a, bool b) {
 
 int main() {
 
-	HashSet<int> hs(10);
+	HashSet hs(10);
 
   int a = 0x12ab345;
   int b = 0xfeed425;
