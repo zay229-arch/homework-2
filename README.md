@@ -78,7 +78,7 @@ Write a Makefile inside of the project root that has the following targets:
 - debug - build a shared library with debug symbols, put it in `build/lib/debug`. Put object files in `build/objects`
 - clean - remove all build artifacts by removing the build directory.
 - install - move the shared library to `/usr/lib`
-- test - compile tsts/test.cpp and run it. Put the tests executable in `build/bin`. Put object files in `build/objects`
+- test - compile `tests/test.cpp` and run it. Put the tests executable in `build/bin`. Put object files in `build/objects`
 
 ## Code Demo and Explanation
 
