@@ -80,6 +80,10 @@ Write a Makefile inside of the project root that has the following targets:
 - install - move the shared library to `/usr/lib`
 - test - compile `tests/test.cpp` and run it. Put the tests executable in `build/bin`. Put object files in `build/objects`
 
+## Tests
+
+Write at least 5 more tests in `tests/test.cpp`.
+
 ## Code Demo and Explanation
 
 This is the oral portion of the homework. You will record an explanation for your data structure which demonstrates its usage and implementation. You don't have to show your face but you do have to record your voice (accommodations are available upon request). You should be sure to cover the following points in your discussion:
