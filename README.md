@@ -57,7 +57,7 @@ class HashSet {
     // Returns the number of items in the hash set
     size_t len();
 
-    // Returns the number of empty buckets that can be filled before reallocating
+    // Returns the number of empty buckets that can be filled before reallocating (Use a threshold of 70 for resize)
     size_t capacity();
 
     // Print Table. You can do this in a way that helps you implement your hash set.
