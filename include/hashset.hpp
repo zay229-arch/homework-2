@@ -41,7 +41,7 @@ class HashSet {
 
 };
 
-/* Modify this prehash function to work with a template type T instead of a char*
+/* Modify this prehash function to work with a int instead of a char*
 unsigned long prehash(unsigned char *str) {
     unsigned long h = 5381;
     int c;
