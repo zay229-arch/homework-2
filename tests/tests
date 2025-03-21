@@ -1,0 +1,48 @@
+-- Byte Code format for Hash Set Tests
+
+-- test-file = test* | comment* ;  
+-- test = create-hashset | insert-item | remove-item | assert-contains | assert-doesn't-contain | assert-size | assert-load | end-of-test ;  
+-- 
+-- create-hashset = "H", size ;  
+-- insert-item = "I", value ;  
+-- remove-item = "R", value ;  
+-- assert-contains = "C", value ;  
+-- assert-doesn't-contain = "D", value ;  
+-- assert-size = "S", size ;  
+-- assert-load = "L", load_factor ;  
+-- end-of-test = "X" ;  
+-- 
+-- value = "-"? digit+ ;  
+-- size = digit+ ;  
+-- load_factor = digit+ ;  
+-- comment = "--", ?anycharacter? ;
+
+-- Inserts a value of 5 into the hash set and verifies its presence, size, and load factor.
+H10I5C5S1L10X
+
+-- This bytecode string should be interpreted as follows:
+
+-- H 10 -- create a hash set with 10 buckets
+-- I 5 -- insert the value 5 into the hash set
+-- C 5 -- assert that the value 5 is present in the set
+-- S 1 -- assert that the size of the hash set is 1
+-- L 10 -- assert that the load factor is 10%
+-- X -- end of test
+
+-- Test 2 - Insert a single value in a larger set
+H20I5C5S1L5X
+
+-- Test 3 - Insert multiple values
+H10I5I10I15C5C10C15S3L30X
+
+-- Test 4 - Remove a value from the set
+H10I5R5D5S0L0X
+
+-- Test 5 - Remove one value from multiple
+H10I5I10I15R10C5C15D10S2L20X
+
+-- Test 6 - Remove a value not in the set
+H10I5R10C5D10S1L10X
+
+-- Test 7 - Insert duplicate values
+H10I5I5C5S1L10X
