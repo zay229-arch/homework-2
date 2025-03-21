@@ -1,8 +1,8 @@
-# CSE 109 - Systems Software - Spring 2023
+# CSE 109 - Systems Software - Spring 2025
 
-# Program 3 - HashSet
+# Homework 3 - Implementing and Evaluating a Data Structure in C++
 
-⏰ **Due Date: 4/10/2023 EOD**
+⏰ **Due Date: 4/4/2025 EOD**
 
 ## Instructions 
 
@@ -16,95 +16,237 @@
 
 4. When you've committed all of your work, there's nothing left to do to submit the assignment.
 
-## Assignment
+## Hash Set Class
 
-In assignment you will implement a hash set data structure in C++. The core of the hashset is an array of linked list pointers. The type of the table is a `LinkedList**`. The first star indicates it's a pointer to an array, the second star indicates each array element holds a LinkedList pointer. The Hashset also holds its size, and the current load factor. The load factor will be recalculated on each insert. 
+In assignment you will implement a hash set data structure in C++. The core of the hashset is an array of linked list pointers.
+
+Hash sets are useful because they have very good performance in the average case. But they can be tempermental because ther are a lot of dials to tune to achieve this performance.
+
+```
+┌─────────────┬──────────┬───────────┐
+│ Operation   │ Average  │ Worst Case│
+├─────────────┼──────────┼───────────┤
+│ Search      │ Θ(1)     │ O(n)      │
+│ Insert      │ Θ(1)     │ O(n)      │
+│ Delete      │ Θ(1)     │ O(n)      │
+├─────────────┼──────────┼───────────┤
+│ Space       │ Θ(n)     │ O(n)      │
+└─────────────┴──────────┴───────────┘
+```
 
 The Hashset struct is declared in `hashset.h`, along with a number of functions you will need to implement.
 
 ```c++
 class HashSet {
   private:
-    // The backbone of the hash set. This is an array of Linked List pointers.
+    // The backbone of the hash set: an array of linked list pointers for handling collisions
     LinkedList** array;
 
     // The number of buckets in the array
-    size_t size; 
+    size_t bucket_count; 
 
-    // Generate a prehash for an item with a given size
-    unsigned long prehash(int item);
+    // Total number of elements in the set
+    size_t element_count;
+
+    // Load factor threshold for resizing (default 70)
+    unsigned int load_threshold;
+
+    // The current load factor (average number of elements per bucket)
+    unsigned int load_factor;
+
+    // Resize the array by adjusting the number of buckets, rehashes all current elements
+    void rehash(size_t new_size);
 
   public:
-    // Initialize an empty hash set, where size is the number of buckets in the array
-    HashSet(size_t size);
+    // Initialize an empty hash set with a given number of buckets
+    explicit HashSet(size_t initial_size);
 
-    // Free all memory allocated by the hash set
+    // Destructor: Free all allocated memory
     ~HashSet();
 
-    // Hash an unsigned long into an index that fits into a hash set
-    unsigned long hash(int item);
+    // Generate a prehash for an item
+    unsigned long prehash(int item) const;
 
-    // Insert item in the set. Return true if the item was inserted, false if it wasn't (i.e. it was already in the set)
-    // Recalculate the load factor after each successful insert (round to nearest whole number).
+    // Convert prehash value into a valid bucket index
+    unsigned long hash(unsigned long prehash) const;
+
+    // Insert item into the set. Returns true if inserted, false if already present.
+    // Rehashes if inserting will increase the load factor past the threshold.
     bool insert(int item);
 
-    // Remove an item from the set. Return true if it was removed, false if it wasn't (i.e. it wasn't in the set to begin with)
+    // Remove an item from the set. Returns true if removed, false if not found.
     bool remove(int item);
 
-    // Return true if the item exists in the set, false otherwise
-    bool contains(int item);
+    // Check if the item exists in the set
+    bool contains(int item) const;
 
-    // Returns the number of items in the hash set
-    size_t len();
+    // Return the number of elements in the hash set
+    size_t count() const;
 
-    // Returns the number of empty buckets that can be filled before reallocating (Use a threshold of 70 for resize)
-    size_t capacity();
+    // Return the current load factor as a percentage
+    unsigned int load() const;
 
-    // Print Table. You can do this in a way that helps you implement your hash set.
-    void print();
+    // Set a new load factor threshold for resizing
+    void set_load_threshold(unsigned int threshold);
 
+    // Remove all elements from the hash set
+    void clear();
+
+    // Print the hash table (format is implementation-dependent)
+    void print() const;
 };
+
 ```
 
-💡 Tip: Feel free to use your own linked list implementation, but don't use a standard library linked list.
+📝 Note: The load factor is stored as an unsigned integer so we can make comparisons easier. A load factor of 70 means that the average number of elements per bin is 0.7. When you recalculate the load factor, round to the nearest tenth and multiply by 100.
+
+💡 Tip: Feel free to use your own linked list implementation or the HW2 solutions, but don't use a standard library linked list.
+
+### Collision Resolution
+
+There are many ways of dealing with collisions - when two items hash to the same bucket. For this assignment, we will use the linked-list chain method; each bucket contains a linked list, which starts empty, and grows every time an item is inserte and hashes to that bucket. When the item needs to be found or removed, the typical linked list find/remove is used.
+
+"But doesn't that mean the hash set just performs like a linked list?" you might wonder. No, as long as we keep those linked list chains short. That's where the load factor comes in. As long as that stays low, then it won't take long to search through the whole list. 
+
+Conceptually, a `LinkedList**` is an array in which each element is a pointer to a `LinkedList`. It's analogous to a `char**`, which we encountered with `argv`. In that case, it was an array of strings. The first star indicates it's a pointer to an array, the second star indicates each array element holds a LinkedList pointer.
+
+Here's a diagram of a hash set of size 8 holding 11 elements might look:
+
+```
+---------------------------------
+Bucket | Linked List
+---------------------------------
+  0    |  ⬜ → ⬜ → ⬜ → nullptr
+  1    |  ⬜ → nullptr
+  2    |  ⬜ → ⬜ → nullptr
+  3    |  nullptr
+  4    |  ⬜ → nullptr
+  5    |  nullptr
+  6    |  ⬜ → ⬜ → ⬜ → ⬜ → nullptr
+  7    |  nullptr
+---------------------------------
+⬜ = Linked list node containing a stored value
+```
 
 ## Makefile
 
 Write a Makefile inside of the project root that has the following targets:
 
-- all - build static and shared libraries.
-- static - build a static library `libhashset.a`, put it in `build/lib/release`. Put object files in `build/objects`
-- shared - build a shared library `libhashset.so`, put it in `build/lib/release`. Put object files in `build/objects`
-- debug - build a shared library with debug symbols, put it in `build/lib/debug`. Put object files in `build/objects`
-- clean - remove all build artifacts by removing the build directory.
-- install - move the shared library to `/usr/lib`
-- test - compile `tests/test.cpp` and run it. Put the tests executable in `build/bin`. Put object files in `build/objects`
+- all - Build both static and shared libraries.
+- static - Build a static library `libhashset.a`, place it in `build/lib/release`. Store object files in `build/objects`.
+- shared - Build a shared library `libhashset.so`, place it in `build/lib/release`. Store object files in `build/objects`.
+- debug - Build a shared library with debug symbols (`libhashset.so`), place it in `build/lib/debug`. Store object files in `build/objects`.
+- clean - Remove all build artifacts by deleting the `build` directory.
+- install - Install the shared library to `/usr/local/lib`.
+- test - Compile `tests/test.cpp`, place the executable in `build/bin`, store object files in `build/objects`, and run the tests.
 
-## Tests
+## Validation
 
-Write at least 5 more tests in `tests/test.cpp`.
+To validate the program behaves as expected, we consider both its functionality and performance.
 
-## Code Demo and Explanation
+### Functionality
 
-This is the oral portion of the homework. You will record an explanation for your data structure which demonstrates its usage and implementation. You don't have to show your face but you do have to record your voice (accommodations are available upon request). You should be sure to cover the following points in your discussion:
+Validate functionality with unit tests, which are small and verify operations like insertion, deletion, lookup, and resizing. Important aspects of writing good unit tests are:
 
-- **Purpose and functionality of code:** Explain what your code does and how it works.
+- Test Coverage: do you test all the functionality of the hash set?
+- Edge Cases: do you test edge cases such as duplicate insertions and removing non-existent items?
 
-- **Data structures:** Explain how the hash set data structure is implemented. How did you make use of the linked list?
+Write a C++ program that runs the tests located in the `/tests/tests` file. Your program should:
 
-- **Makefile:** Explain your makefile and the various targets you were asked to write. 
+- Read in the test file from disk.
+- Parse the test file to extract the byte code for each test.
+- Iterate through each byte code string in the test file.
+- For each byte code string,
+  - Create a new hash set data structure
+  - Iterate through the byte code and execute the indicarted hash set operation (insert, remove, contains, size, capacity).
+  - Verify that the final state of the hash set is as expected.
+  - Print the test result to the console. 
+- Indicate whether the tests all pass, and if not, which ones failed.
+- Exit with the number of tests that failed.
 
-- **Code organization and style:** Explain how your code is organized and structured, discuss any design decisions you made. You should also discuss your coding style and any coding conventions you followed.
+📝 Note: The tests file includes 10 example tests, but your program will be tested against more that are not included in the assignment.
 
-If you didn't finish the homework in is entirety, explain how you attempted to solve it and where you got stuck. This will get you at least some points. 
+### Performance
 
-You can use Zoom to do this, [here is a link](https://support.zoom.us/hc/en-us/articles/360059781332-Getting-started-with-recording) to some instructions. You don't have to record your face, only your voice and the screen. Go through the answer and explain how you arrived there. Your goal with this question is to convince me you know what you are talking about, so I want you to do this without reading a script or written answer. Just go through line by line and explain what the program does. When you are done, upload your recording to your Lehigh Drive and add a link below. 
+Performance tests measure execution time over large-scale inputs. As the number of elements contained in the set increase, we hope that the time to insert, find, or remove elements stays constant.
 
-**💥IMPORTANT: Make sure you give blanket permission to the link holder to view the file**
+There is a file called `tests/bench.cpp`, which contains a framework for benchmarking datastructures using C++ timing features. It demonstrates this using the [`std::unordered_set`](https://en.cppreference.com/w/cpp/container/unordered_set), which you can use as a point of comparison against your hash set.
 
-Paste Recording Link(s) Here:
+1. Set Up Experiment Parameters
+    - Define different values of N.
+    - Measure insertion, lookup, and deletion times separately.
+2. Verify O(1) Growth
+    - If times remain almost constant across increasing N, then operations are O(1).
+
+```
+┌──────────┬─────────────┬────────────────┬────────────┬──────┬───────────┐
+│ Elements │ Load Factor │ Operation Time │ Collisions │ Size │ Rehashed? │
+│     N    │      %      │      (ns)      │    Count   │ (MB) │   Yes/No  │
+├──────────┼─────────────┼────────────────┼────────────┼──────┼───────────┤
+│    500   │             │                │            │      │           │
+│   1000   │             │                │            │      │           │
+│   5000   │             │                │            │      │           │
+│   7000   │             │                │            │      │           │
+│  10000   │             │                │            │      │           │
+└──────────┴─────────────┴────────────────┴────────────┴──────┴───────────┘
+```
+
+#### Collect Data
+
+We need to collect data on the actual performance of the hash set, and we will compare our implementation against the standard library hash set. This is out data matrix:
+
+- 2 data structures
+    - Your `HashSet` implementation 
+    - Control: `std::unordered_set`
+
+- 3 Load factors
+    - Load factor threshold 70
+    - Load factor threshold 20    
+    - Load factor threshold 120
+
+- 3 Operations
+    - Insert, 
+    - Contains, 
+    - Remove
+
+2 Data structures x 3 Load factors x 3 operations x 5 max elements = 90 total experiments 
+
+💡 Tip: Consider automating this with a test script.
+
+#### Make Charts
+
+From this, you will create the following charts:
+
+1. Operation Performance vs. Element Count (Line Chart)
+    - X-axis: Number of elements (log scale: 1K, 10K, 100K, 1M, 10M)
+    - Y-axis: Average execution time (microseconds)
+    - Lines:
+        - 3 operations (insert, contains, remove)
+        - 2 data structures (HashSet, std::unordered_set)
+        - Total lines: 6
+2. Load Factor Impact on Performance (Bar Chart)
+    -  X-axis: Load factor thresholds (20, 70, 120)
+    -  Y-axis: Execution time for each operation
+    -  Bars:
+        -  2 operations (insert, contains, remove)
+        -  2 data structures (HashSet, std::unordered_set)
+        -  Total bars: 6 per load factor × 3 load factors = 18
+
+📝 Note: Proper charts have a title, labeled axes with units, grid lines, a legend, 
+
+💡 Tip: when dealing with exponential data, a log scale can help visualize treds
 
 ## Evaluation
+
+Deliverables:
+
+- Source code for a linked list implemention written in C, and a build script that compiles the code to static and dynamic libararies.
+- An interpreter that evaluates the provided test file
+- 20 additional tests
+- A .gitlab-ci.yml script that runs your code against the provided tests.
+- The two indicated charts, along with a writeup (approx 2-pages) on your procedures and findings. You may use LLMs for this, and it should be written in a Markdown file to replace this README file. Make sure your document displays your charts.
+
+Some things to keep in mind:
 
 - Only files under version control in your forked assignment repository will be graded. Local files left untracked on your computer will not be considered.
 
@@ -131,6 +273,3 @@ Some things to take into consideration when writing your assignment:
 - Using the right data type can make your program more efficient and less error-prone. For example, use integers when working with whole numbers, and use floating-point numbers when working with decimal numbers. With systems software especially, we want to pay attention to this component of sofware design.
 
 - Test your code: Before releasing your code, make sure to test it thoroughly. Try to anticipate how users will use your program and test it under different conditions to make sure it works as expected.
-
-
-
