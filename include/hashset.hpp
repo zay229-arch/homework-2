@@ -1,53 +1,58 @@
 class HashSet {
   private:
-    // The backbone of the hash set. This is an array of Linked List pointers.
+    // The backbone of the hash set: an array of linked list pointers for handling collisions
     LinkedList** array;
 
     // The number of buckets in the array
-    size_t size; 
+    size_t bucket_count; 
 
-    // Generate a prehash for an item with a given size
-    unsigned long prehash(int item);
+    // Total number of elements in the set
+    size_t element_count;
+
+    // Load factor threshold for resizing (default 70)
+    unsigned int load_threshold;
+
+    // The current load factor (average number of elements per bucket)
+    unsigned int load_factor;
+
+    // Resize the array by adjusting the number of buckets, rehashes all current elements
+    void rehash(size_t new_size);
 
   public:
-    // Initialize an empty hash set, where size is the number of buckets in the array
-    HashSet(size_t size);
+    // Initialize an empty hash set with a given number of buckets
+    explicit HashSet(size_t initial_size);
 
-    // Free all memory allocated by the hash set
+    // Destructor: Free all allocated memory
     ~HashSet();
 
-    // Hash an unsigned long into an index that fits into a hash set
-    unsigned long hash(int item);
+    // Generate a prehash for an item
+    unsigned long prehash(int item) const;
 
-    // Insert item in the set. Return true if the item was inserted, false if it wasn't (i.e. it was already in the set)
-    // Recalculate the load factor after each successful insert (round to nearest whole number).
-    // If the load factor exceeds 70 after insert, resize the table to hold twice the number of buckets.
+    // Convert prehash value into a valid bucket index
+    unsigned long hash(unsigned long prehash) const;
+
+    // Insert item into the set. Returns true if inserted, false if already present.
+    // Rehashes if inserting will increase the load factor past the threshold.
     bool insert(int item);
 
-    // Remove an item from the set. Return true if it was removed, false if it wasn't (i.e. it wasn't in the set to begin with)
+    // Remove an item from the set. Returns true if removed, false if not found.
     bool remove(int item);
 
-    // Return true if the item exists in the set, false otherwise
-    bool contains(int item);
+    // Check if the item exists in the set
+    bool contains(int item) const;
 
-    // Returns the number of items in the hash set
-    size_t len();
+    // Return the number of elements in the hash set
+    size_t count() const;
 
-    // Returns the number of empty buckets that can be filled before reallocating
-    size_t capacity();
+    // Return the current load factor as a percentage
+    unsigned int load() const;
 
-    // Print Table. You can do this in a way that helps you implement your hash set.
-    void print();
+    // Set a new load factor threshold for resizing
+    void set_load_threshold(unsigned int threshold);
 
+    // Remove all elements from the hash set
+    void clear();
+
+    // Print the hash table (format is implementation-dependent)
+    void print() const;
 };
-
-/* Modify this prehash function to work with a int instead of a char*
-unsigned long prehash(unsigned char *str) {
-    unsigned long h = 5381;
-    int c;
-    while (c = *str++) { 
-	    h = ((h << 5) + h) + c;
-    }
-    return h;
-}*/
-
