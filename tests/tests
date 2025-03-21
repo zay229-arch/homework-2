@@ -1,5 +1,5 @@
 -- Byte Code format for Hash Set Tests
-
+--
 -- test-file = test* | comment* ;  
 -- test = create-hashset | insert-item | remove-item | assert-contains | assert-doesn't-contain | assert-size | assert-load | end-of-test ;  
 -- 
@@ -46,3 +46,12 @@ H10I5R10C5D10S1L10X
 
 -- Test 7 - Insert duplicate values
 H10I5I5C5S1L10X
+
+-- Test 8 - Test negative values and edge case handling
+H7I5I-10I-999C5C-10C-999R5D5I5C5S3L43X
+
+-- Test 9 - High load factor stress test with removals
+H5I1I2I3I4I5I6I7I8I9I10R2R4R6R8R10C1C3C5C7C9D2D4D6D8D10S5L100X
+
+-- Test 10 - Sequential operations with intermediate assertions
+H15I10S1L7I20S2L13C10C20I30S3L20R20S2L13C10D20C30I20C20R10R30I40I50I60S4L27D10D30C40C50C60X
