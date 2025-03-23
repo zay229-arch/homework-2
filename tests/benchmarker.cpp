@@ -13,8 +13,8 @@ size_t get_memory_usage() {
 }
 
 int main() {
-    const int N = 10000000; // Number of elements
-    std::unordered_set<int> hashSet;
+    const int N = 10000000; // Number of elements, we can change this parameter
+    std::unordered_set<int> hashSet; // This is the std hash set, it's a template class so the <int> indicates the hash set contains integers
     // HashSet hashSet; // Replace with your custom hash set type
     std::vector<int> testElements;
     
@@ -39,7 +39,7 @@ int main() {
     // Measure lookup time
     auto start_lookup = std::chrono::high_resolution_clock::now();
     for (int val : testElements) {
-        volatile bool found = hashSet.find(val) != hashSet.end(); // Prevent compiler optimization
+        // Find out if the hash set contains val.
     }
     auto end_lookup = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> lookup_time = end_lookup - start_lookup;
