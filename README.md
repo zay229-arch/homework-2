@@ -240,7 +240,7 @@ From this, you will create the following charts:
 
 Deliverables:
 
-- Source code for a linked list implemention written in C, and a build script that compiles the code to static and dynamic libararies.
+- Source code for a hash set implemention written in C++, and a build script that compiles the code to static and dynamic libararies.
 - An interpreter that evaluates the provided test file
 - 20 additional tests
 - A .gitlab-ci.yml script that runs your code against the provided tests.
