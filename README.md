@@ -252,7 +252,7 @@ Some things to keep in mind:
 
 - Only code committed *and pushed* prior to the time of grading will be accepted. Locally committed but unpushed code will not be considered.
 
-- Your assignment will be graded according to the [Programming Assignment Grading Rubric](https://drive.google.com/open?id=1V0nBt3Rz6uFMZ9mIaFioLF-48DFX0VdkbgRUDM_eIFk).
+- Your assignment will be graded according to the [Programming Assignment Grading Rubric](https://docs.google.com/document/d/1GwWxlnS_YIezXcwgiO0mjGrCh7VCOLAxCyZ2dGqpuoM/edit?tab=t.0).
 
 ## Tips For Success 
 
