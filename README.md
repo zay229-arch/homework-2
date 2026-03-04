@@ -1,8 +1,8 @@
 # CSE 109 - Systems Software - Spring 2025
 
-# Homework 3 - Implementing and Evaluating a Data Structure in C++
+# Homework 2 - Implementing and Evaluating a Data Structure in C++
 
-⏰ **Due Date: 4/4/2025 EOD**
+⏰ **Due Date: 3/26/2026 EOD**
 
 ## Instructions 
 
