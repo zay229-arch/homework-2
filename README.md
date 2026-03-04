@@ -1,4 +1,4 @@
-# CSE 109 - Systems Software - Spring 2025
+# CSE 109 - Systems Software - Spring 2026
 
 # Homework 2 - Implementing and Evaluating a Data Structure in C++
 
@@ -234,7 +234,7 @@ From this, you will create the following charts:
 
 📝 Note: Proper charts have a title, labeled axes with units, grid lines, a legend, 
 
-💡 Tip: when dealing with exponential data, a log scale can help visualize treds
+💡 Tip: when dealing with exponential data, a log scale can help visualize trends
 
 ## Evaluation
 
