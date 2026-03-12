@@ -68,3 +68,17 @@ bool LinkedList::remove(int item)
     }
     return false;
 }
+
+// Check if a value exists in the list
+bool LinkedList::contains(int item) const
+{
+    Node *current = head;
+
+    while (current != nullptr)
+    {
+        if (current->value == item)
+            return true;
+        current = current->next;
+    }
+    return false;
+}
