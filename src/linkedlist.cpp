@@ -34,3 +34,37 @@ bool LinkedList::insert(int item)
 
     return true;
 }
+
+// Remove a value from the list
+// Returns true if removed, false if not found
+bool LinkedList::remove(int item)
+{
+    Node *current = head;
+    Node *previous = nullptr;
+
+    // Go through the list
+    while (current != nullptr)
+    {
+
+        if (current->value == item)
+        {
+
+            // If removing the first node
+            if (previous == nullptr)
+            {
+                head = current->next;
+            }
+            else
+            {
+                previous->next = current->next;
+            }
+
+            delete current;
+            return true;
+        }
+
+        previous = current;
+        current = current->next;
+    }
+    return false;
+}
