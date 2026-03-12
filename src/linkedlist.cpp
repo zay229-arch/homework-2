@@ -98,3 +98,18 @@ void LinkedList::clear()
     }
     head = nullptr;
 }
+
+// Print the list (can use for debugging)
+void LinkedList::print() const
+{
+    Node *current = head;
+
+    while (current != nullptr)
+    {
+        //(cout means console output.)
+        std::cout << current->value << " -> ";
+        current = current->next;
+    }
+    // std::endl means end line (move to next line)
+    std::cout << "nullptr" << std::endl;
+}
