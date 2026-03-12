@@ -82,3 +82,19 @@ bool LinkedList::contains(int item) const
     }
     return false;
 }
+
+// Delete every node in the list
+void LinkedList::clear()
+{
+
+    Node *current = head;
+
+    while (current != nullptr)
+    {
+        Node *temp = current;
+        current = current->next;
+
+        delete temp;
+    }
+    head = nullptr;
+}
