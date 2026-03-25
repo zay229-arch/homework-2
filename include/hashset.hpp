@@ -1,68 +1,77 @@
-class HashSet {
-  private:
-    // The backbone of the hash set: an array of linked list pointers for handling collisions
-    LinkedList** array;
+#ifndef HASHSET_HPP
+#define HASHSET_HPP
 
-    // The number of buckets in the array
-    size_t bucket_count; 
+// This include gives us the size_t type (for counting things)
+#include <cstddef>
+#include "linkedlist.hpp"
 
-    // Total number of elements in the set
-    size_t element_count;
+class HashSet
+{
+private:
+  // The backbone of the hash set: an array of linked list pointers for handling collisions
+  LinkedList **array;
 
-    // Load factor threshold for resizing (default 70)
-    unsigned int load_threshold;
+  // The number of buckets in the array
+  size_t bucket_count;
 
-    // The current load factor (average number of elements per bucket)
-    unsigned int load_factor;
+  // Total number of elements in the set
+  size_t element_count;
 
-    // Resize the array by adjusting the number of buckets, rehashes all current elements
-    void rehash(size_t new_size);
+  // Load factor threshold for resizing (default 70)
+  unsigned int load_threshold;
 
-  public:
-    // Initialize an empty hash set with a given number of buckets
-    explicit HashSet(size_t initial_size);
+  // The current load factor (average number of elements per bucket)
+  unsigned int load_factor;
 
-    // Destructor: Free all allocated memory
-    ~HashSet();
+  // Resize the array by adjusting the number of buckets, rehashes all current elements
+  void rehash(size_t new_size);
 
-    // Generate a prehash for an item
-    unsigned long prehash(int item) const;
+public:
+  // Initialize an empty hash set with a given number of buckets
+  explicit HashSet(size_t initial_size);
 
-    // Convert prehash value into a valid bucket index
-    unsigned long hash(unsigned long prehash) const;
+  // Destructor: Free all allocated memory
+  ~HashSet();
 
-    // Insert item into the set. Returns true if inserted, false if already present.
-    // Rehashes if inserting will increase the load factor past the threshold.
-    bool insert(int item);
+  // Generate a prehash for an item
+  unsigned long prehash(int item) const;
 
-    // Remove an item from the set. Returns true if removed, false if not found.
-    bool remove(int item);
+  // Convert prehash value into a valid bucket index
+  unsigned long hash(unsigned long prehash) const;
 
-    // Check if the item exists in the set
-    bool contains(int item) const;
+  // Insert item into the set. Returns true if inserted, false if already present.
+  // Rehashes if inserting will increase the load factor past the threshold.
+  bool insert(int item);
 
-    // Return the number of elements in the hash set
-    size_t count() const;
+  // Remove an item from the set. Returns true if removed, false if not found.
+  bool remove(int item);
 
-    // Return the current load factor as a percentage
-    unsigned int load() const;
+  // Check if the item exists in the set
+  bool contains(int item) const;
 
-    // Set a new load factor threshold for resizing
-    void set_load_threshold(unsigned int threshold);
+  // Return the number of elements in the hash set
+  size_t count() const;
 
-    // Remove all elements from the hash set
-    void clear();
+  // Return the current load factor as a percentage
+  unsigned int load() const;
 
-    // Print the hash table (format is implementation-dependent)
-    void print() const;
+  // Set a new load factor threshold for resizing
+  void set_load_threshold(unsigned int threshold);
+
+  // Remove all elements from the hash set
+  void clear();
+
+  // Print the hash table (format is implementation-dependent)
+  void print() const;
 };
+#endif
 
 /* Modify this prehash function to work with a int instead of a char*
 unsigned long prehash(unsigned char *str) {
     unsigned long h = 5381;
     int c;
-    while (c = *str++) { 
-	    h = ((h << 5) + h) + c;
+    while (c = *str++) {
+      h = ((h << 5) + h) + c;
     }
     return h;
 }*/
