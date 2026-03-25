@@ -30,4 +30,7 @@ unsigned long HashSet::prehash(int item) const
     return h;
 }
 
-// hello
+unsigned long HashSet::hash(unsigned long prehash) const
+{
+    return prehash % bucket_count;
+}
