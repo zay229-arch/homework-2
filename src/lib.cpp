@@ -117,3 +117,18 @@ void HashSet::set_load_threshold(unsigned int threshold)
 {
     load_threshold = threshold;
 }
+
+// Remove all elements from the hash set
+void HashSet::clear()
+{
+    // Clear all linked lists in the array
+    for (size_t i = 0; i < bucket_count; i++)
+    {
+        // Clear the linked list at this bucket if it exists
+        if (array[i] != nullptr)
+            array[i]->clear();
+    }
+    // Reset element count and load factor
+    element_count = 0;
+    load_factor = 0;
+}
