@@ -21,6 +21,13 @@ HashSet::~HashSet()
         delete array[i];
     }
     delete[] array;
-
 }
 
+unsigned long HashSet::prehash(int item) const
+{
+    unsigned long h = 5381;
+    h = ((h << 5) + h) + item;
+    return h;
+}
+
+// hello
