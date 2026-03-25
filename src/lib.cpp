@@ -111,3 +111,9 @@ unsigned int HashSet::load() const
 {
     return load_factor;
 }
+
+// Set a new load factor threshold for resizing
+void HashSet::set_load_threshold(unsigned int threshold)
+{
+    load_threshold = threshold;
+}
