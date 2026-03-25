@@ -35,6 +35,8 @@ unsigned long HashSet::hash(unsigned long prehash) const
     return prehash % bucket_count;
 }
 
+// Insert item into the set. Returns true if inserted, false if already present.
+// Rehashes if inserting will increase the load factor past the threshold.
 bool HashSet::insert(int item)
 {
     // Check if the item already exists in the set
@@ -62,6 +64,7 @@ bool HashSet::insert(int item)
     return true;
 }
 
+// Remove an item from the set. Returns true if removed, false if not found.
 bool HashSet::remove(int item)
 {
     // Find the bucket index using hash function
@@ -77,6 +80,21 @@ bool HashSet::remove(int item)
             load_factor = (unsigned int)((1.0 * element_count / bucket_count) * 100);
             return true;
         }
+    }
+    // Item was not found in the set
+    return false;
+}
+
+// Check if the item exists in the set
+bool HashSet::contains(int item) const
+{
+    // Find the bucket index using hash function
+    unsigned long bucket_index = hash(prehash(item));
+
+    // Check if the item exists in the linked list at that bucket
+    if (array[bucket_index] != nullptr)
+    {
+        return array[bucket_index]->contains(item);
     }
     // Item was not found in the set
     return false;
