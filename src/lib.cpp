@@ -61,3 +61,23 @@ bool HashSet::insert(int item)
     // Successfully inserted the item
     return true;
 }
+
+bool HashSet::remove(int item)
+{
+    // Find the bucket index using hash function
+    unsigned long bucket_index = hash(prehash(item));
+
+    // try to remove the item from the linked list at that bucket
+    if (array[bucket_index] != nullptr)
+    {
+        // If the item was removed, update element count and load factor
+        if (array[bucket_index]->remove(item))
+        {
+            element_count--;
+            load_factor = (unsigned int)((1.0 * element_count / bucket_count) * 100);
+            return true;
+        }
+    }
+    // Item was not found in the set
+    return false;
+}
