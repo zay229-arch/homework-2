@@ -99,3 +99,15 @@ bool HashSet::contains(int item) const
     // Item was not found in the set
     return false;
 }
+
+// Return the number of elements in the hash set
+size_t HashSet::count() const
+{
+    return element_count;
+}
+
+// Return the current load factor as a percentage
+unsigned int HashSet::load() const
+{
+    return load_factor;
+}
