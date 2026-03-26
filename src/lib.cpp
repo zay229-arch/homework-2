@@ -1,5 +1,8 @@
 #include "hashset.hpp"
 
+// iostream allows printing with std::cout
+#include <iostream>
+
 HashSet::HashSet(size_t initial_size)
 {
     bucket_count = initial_size;
@@ -131,4 +134,24 @@ void HashSet::clear()
     // Reset element count and load factor
     element_count = 0;
     load_factor = 0;
+}
+
+// print the hash table (format is dependent on my implementation of print in LinkedList)
+void HashSet::print() const
+{
+    for (size_t i = 0; i < bucket_count; i++)
+    {
+        std::cout << "Bucket " << i << ": ";
+
+        // Print the linked list at this bucket if it exists
+        if (array[i] != nullptr)
+        {
+            array[i]->print();
+        }
+        // If the bucket is empty, print "nullptr"
+        else
+        {
+            std::cout << "nullptr" << std::endl;
+        }
+    }
 }
