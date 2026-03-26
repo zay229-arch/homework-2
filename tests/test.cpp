@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+
+// vector is a dynamic array that can resize itself automatically when elements are added or removed.
 #include <vector>
 #include "hashset.hpp"
 
