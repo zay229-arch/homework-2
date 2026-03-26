@@ -1,4 +1,4 @@
-\# ============================================================
+# ============================================================
 #  Makefile for HashSet project
 # ============================================================
 
@@ -21,9 +21,9 @@ STATIC_LIB  := $(LIB_REL_DIR)/libhashset.a
 SHARED_REL  := $(LIB_REL_DIR)/libhashset.so
 SHARED_DBG  := $(LIB_DBG_DIR)/libhashset.so
 
-TEST_SRC := tests/benchmarker.cpp
-TEST_OBJ := $(OBJ_DIR)/benchmarker.o
-TEST_BIN := $(BIN_DIR)/test_runner
+TEST_SRCS := tests/test.cpp tests/test_runner.cpp
+TEST_OBJS := $(OBJ_DIR)/test.o $(OBJ_DIR)/test_runner.o
+TEST_BIN  := $(BIN_DIR)/test_runner
 
 MAIN_SRC := src/bin/main.cpp
 MAIN_OBJ := $(OBJ_DIR)/main.o
@@ -79,11 +79,15 @@ $(MAIN_OBJ): $(MAIN_SRC)
 test: static $(TEST_BIN)
 	$(TEST_BIN)
 
-$(TEST_BIN): $(TEST_OBJ) $(STATIC_LIB)
+$(TEST_BIN): $(TEST_OBJS) $(STATIC_LIB)
 	mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-$(TEST_OBJ): $(TEST_SRC)
+$(OBJ_DIR)/test.o: tests/test.cpp
+	mkdir -p $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/test_runner.o: tests/test_runner.cpp
 	mkdir -p $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
