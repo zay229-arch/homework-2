@@ -68,6 +68,35 @@ bool run_test(const std::string &bytecode, int test_num)
         case 'R':
             hs->remove(arg);
             break;
+
+        // C <value> — assert the value IS in the set; fail if it isn't
+        case 'C':
+            if (!hs->contains(arg))
+            {
+                std::cout << "Test #" << test_num << " FAILED: expected " << arg << " to be in the set\n";
+                passed = false;
+            }
+            break;
+
+        // D <value> — assert the value is NOT in the set; fail if it is
+        case 'D':
+            if (hs->contains(arg))
+            {
+                std::cout << "Test #" << test_num << " FAILED: expected " << arg << " to NOT be in the set\n";
+                passed = false;
+            }
+            break;
+
+        // S <size> — assert the set contains exactly <size> elements
+        case 'S':
+        // hs->count() returns the number of elements currently in the set. We compare it to the expected size (arg).
+            if ((int)hs->count() != arg)
+            {
+                std::cout << "Test #" << test_num << " FAILED: expected size " << arg
+                          << " but got " << hs->count() << "\n";
+                passed = false;
+            }
+            break;
         }
     }
 }
