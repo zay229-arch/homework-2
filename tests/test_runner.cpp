@@ -89,7 +89,7 @@ bool run_test(const std::string &bytecode, int test_num)
 
         // S <size> — assert the set contains exactly <size> elements
         case 'S':
-        // hs->count() returns the number of elements currently in the set. We compare it to the expected size (arg).
+            // hs->count() returns the number of elements currently in the set. We compare it to the expected size (arg).
             if ((int)hs->count() != arg)
             {
                 std::cout << "Test #" << test_num << " FAILED: expected size " << arg
@@ -97,6 +97,25 @@ bool run_test(const std::string &bytecode, int test_num)
                 passed = false;
             }
             break;
+
+        // L <load> — assert the current load factor equals <load>
+        case 'L':
+            if ((int)hs->load() != arg)
+            {
+                std::cout << "Test #" << test_num << " FAILED: expected load " << arg
+                          << " but got " << hs->load() << "\n";
+                passed = false;
+            }
+            break;
+
+        // X — end of test; free the HashSet and return the result
+        case 'X':
+            delete hs;
+            return passed;
         }
     }
+
+    // If we reach here the bytecode had no 'X' terminator — clean up and return.
+    delete hs;
+    return passed;
 }
