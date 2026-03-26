@@ -155,3 +155,34 @@ void HashSet::print() const
         }
     }
 }
+
+// Resize the array by adjusting the number of buckets, and rehashing all existing elements into the new array.
+// This is called when the load factor exceeds the threshold.
+void HashSet::rehash(size_t new_size)
+{
+    // Save the old array and bucket count for rehashing
+    LinkedList **old_array = array;
+    size_t old_bucket_count = bucket_count;
+
+    // Create a new array with the new size and reset counts
+    array = new LinkedList *[new_size];
+    bucket_count = new_size;
+    element_count = 0;
+
+    for (size_t i = 0; i < bucket_count; i++)
+    {
+        array[i] = new LinkedList();
+    }
+
+    // Rehash all existing elements from the old array into the new array
+    for (size_t i = 0; i < old_bucket_count; i++)
+    {
+        // traverse the linked list, starting from the head, and re-insert each value into the new array
+        Node *current = old_array[i]->get_head();
+        while (current != nullptr)
+        {
+            insert(current->value); // Re-insert the value into the new array (this will update element_count and load_factor)
+            current = current->next;
+        }
+    }
+}
