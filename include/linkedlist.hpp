@@ -4,9 +4,6 @@
 // cstddef provides size_t and other standard types
 #include <cstddef>
 
-// iostream allows printing with std::cout
-#include <iostream>
-
 // Node structure representing one element in the linked list.
 struct Node
 {
@@ -29,7 +26,7 @@ public:
     bool contains(int item) const; // check if item exists in list
     void clear();                  // delete all nodes
     void print() const;            // print list contents
-    Node *get_head() const;        // expose head for HashSet rehash traversal
+    Node *get_head() const;        // getter for head pointer (used in rehashing)
 };
 
 #endif

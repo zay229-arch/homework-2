@@ -1,5 +1,8 @@
 #include "linkedlist.hpp"
 
+// iostream allows printing with std::cout
+#include <iostream>
+
 // Constructs an empty list
 LinkedList ::LinkedList()
 {
@@ -113,3 +116,9 @@ void LinkedList::print() const
     // std::endl means end line (move to next line)
     std::cout << "nullptr" << std::endl;
 }
+
+//getter for head pointer (used in rehashing)
+Node *LinkedList::get_head() const
+{
+    return head;
+}  
