@@ -1,44 +1,73 @@
+#include <iostream>
 #include <string>
-#include "hashset.hpp"
+#include "../include/hashset.hpp"
 
-// Returns true if the test passed, false if it failed.
+// Returns true if every assertion in the test passed, or false if any assertion failed.
 bool run_test(const std::string &bytecode, int test_num)
 {
-    int i = 0;
+    int i = 0; // current position in the bytecode string
     int n = bytecode.size();
 
-    // A loop to parse the bytecode string. Each instruction consists of an opcode (a single character) followed by an optional integer argument.
+    // The HashSet we are testing. Created by the 'H' opcode and deleted by the 'X' opcode.
+    // an opcode is a single character that says what operation to perform (e.g. 'H' for create HashSet, 'I' for insert, etc.)
+    HashSet *hs = nullptr;
+
+    // Stays true until an assertion fails.
+    bool passed = true;
+
+    // Each iteration of this loop processes one instruction.
+    // An instruction is an opcode letter (e.g. 'H', 'I') optionally followed by an integer argument.
+    // the integer is a number that the opcode uses for its operation (e.g. the number of buckets for 'H', the value to insert for 'I', etc.)
     while (i < n)
     {
-        // Parse the opcode (the first character of the instruction)
+        // Read the opcode — a single character that says what operation to perform.
         char opcode = bytecode[i];
         i++;
 
-        // Parse the integer argument following the opcode (if any)
-        // the integer argument represents a value that the instruction operates on, such as a number to push onto the stack or an address to jump to.
+        // --- Parse the integer argument that follows the opcode (if any) ---
+
+        // arg will hold the integer argument for the opcode, if it has one. If the opcode doesn't take an argument, this variable will be ignored.
         int arg = 0;
         bool negative = false;
 
-        // Check if the next character is a '-' sign, which indicates that the integer argument is negative. If so, set the negative flag and move past the '-' character.
+        // A '-' character means the argument is a negative number.
         if (i < n && bytecode[i] == '-')
         {
             negative = true;
             i++;
         }
 
-        // Parse the integer argument by reading characters until we encounter a non-digit character. 
-        // For each digit character, we update the arg variable by multiplying the current value by 10 and adding the numeric value of the digit (which we get by subtracting '0' from the character).
+        // Build the integer one digit at a time.
+        // e.g. for "123", first pass: arg = 1, second: arg = 12, third: arg = 123
+        // The condition bytecode[i] >= '0' && bytecode[i] <= '9' checks if the current character is a digit.
         while (i < n && bytecode[i] >= '0' && bytecode[i] <= '9')
         {
+            // Shift the current digits in arg to the left (multiply by 10) and add the new digit.
             arg = arg * 10 + (bytecode[i] - '0');
             i++;
         }
-
+        // If there was a '-' sign, make the argument negative.
         if (negative)
             arg = -arg;
 
-        // TODO: dispatch on opcode
-    }
+        // --- Dispatch: decide what to do based on the opcode ---
 
-    return false;
+        switch (opcode)
+        {
+        // H <size> — create a new HashSet with the given number of buckets
+        case 'H':
+            hs = new HashSet(arg);
+            break;
+
+        // I <value> — insert value into the set
+        case 'I':
+            hs->insert(arg);
+            break;
+
+        // R <value> — remove value from the set
+        case 'R':
+            hs->remove(arg);
+            break;
+        }
+    }
 }
