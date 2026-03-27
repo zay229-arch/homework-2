@@ -23,6 +23,12 @@ private:
   // The current load factor (average number of elements per bucket)
   unsigned int load_factor;
 
+  // Number of times an insertion landed in a non-empty bucket (collision)
+  size_t collision_count;
+
+  // Number of times rehash() has been called
+  size_t rehash_count;
+
   // Resize the array by adjusting the number of buckets, rehashes all current elements
   void rehash(size_t new_size);
 
@@ -63,6 +69,12 @@ public:
 
   // Print the hash table (format is implementation-dependent)
   void print() const;
+
+  // Return total number of collisions that occurred during insertions
+  size_t collisions() const;
+
+  // Return total number of times the table was rehashed
+  size_t rehashes() const;
 };
 #endif
 

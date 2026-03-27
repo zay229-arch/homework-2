@@ -103,6 +103,8 @@ int main()
             std::cout << "  Lookup Time:    " << lookup_time.count() / testElements.size() << " ns per element\n";
             std::cout << "  Remove Time:    " << remove_time.count() / N << " ns per element\n";
             std::cout << "  Memory Used:    " << (mem_after - mem_before) / 1024.0 << " MB\n";
+            std::cout << "  Collisions:     " << hashSet.collisions() << "\n";
+            std::cout << "  Rehashes:       " << hashSet.rehashes() << "\n";
             std::cout << "\n";
         }
     }

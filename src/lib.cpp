@@ -10,6 +10,8 @@ HashSet::HashSet(size_t initial_size)
     element_count = 0;
     load_threshold = 70;
     load_factor = 0;
+    collision_count = 0; // no collisions yet
+    rehash_count = 0;    // no rehashes yet
     array = new LinkedList *[bucket_count];
     for (size_t i = 0; i < bucket_count; i++)
     {
@@ -50,6 +52,10 @@ bool HashSet::insert(int item)
     }
     // Find the bucket index using hash function
     unsigned long bucket_index = hash(prehash(item));
+
+    // If the bucket already has an element, this insertion is a collision
+    if (array[bucket_index]->get_head() != nullptr)
+        collision_count++;
 
     // Insert into the linked list at that bucket
     array[bucket_index]->insert(item);
@@ -132,9 +138,11 @@ void HashSet::clear()
         if (array[i] != nullptr)
             array[i]->clear();
     }
-    // Reset element count and load factor
+    // Reset element count, load factor, and tracking counters
     element_count = 0;
     load_factor = 0;
+    collision_count = 0;
+    rehash_count = 0;
 }
 
 // print the hash table (format is dependent on my implementation of print in LinkedList)
@@ -157,10 +165,25 @@ void HashSet::print() const
     }
 }
 
+// Return total number of collisions that occurred during insertions
+size_t HashSet::collisions() const
+{
+    return collision_count;
+}
+
+// Return total number of times the table was rehashed
+size_t HashSet::rehashes() const
+{
+    return rehash_count;
+}
+
 // Resize the array by adjusting the number of buckets, and rehashing all existing elements into the new array.
 // This is called when the load factor exceeds the threshold.
 void HashSet::rehash(size_t new_size)
 {
+    // Track that a rehash is happening
+    rehash_count++;
+
     // Save the old array and bucket count for rehashing
     LinkedList **old_array = array;
     size_t old_bucket_count = bucket_count;
