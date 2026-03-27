@@ -2,6 +2,7 @@
 
 // iostream allows printing with std::cout
 #include <iostream>
+#include <cmath>
 
 HashSet::HashSet(size_t initial_size)
 {
@@ -55,7 +56,7 @@ bool HashSet::insert(int item)
 
     // Update element count and load factor
     element_count++;
-    load_factor = (unsigned int)((double)element_count / bucket_count * 100);
+    load_factor = (unsigned int)round((double)element_count / bucket_count * 100);
 
     // Check if we need to rehash
     if (load_factor > load_threshold)
@@ -80,7 +81,7 @@ bool HashSet::remove(int item)
         if (array[bucket_index]->remove(item))
         {
             element_count--;
-            load_factor = (unsigned int)((1.0 * element_count / bucket_count) * 100);
+            load_factor = (unsigned int)round((double)element_count / bucket_count * 100);
             return true;
         }
     }

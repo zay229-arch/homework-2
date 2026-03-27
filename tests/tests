@@ -55,3 +55,80 @@ H5I1I2I3I4I5I6I7I8I9I10R2R4R6R8R10C1C3C5C7C9D2D4D6D8D10S5L25X
 
 -- Test 10 - Sequential operations with intermediate assertions
 H15I10S1L7I20S2L13C10C20I30S3L20R20S2L13C10D20C30I20C20R10R30I40I50I60S4L27D10D30C40C50C60X
+
+-- COLLISION & HASH BEHAVIOR
+-- (In H10, items divisible by 10 all land in bucket 3: prehash(n)=177573+n, bucket=(177573+n)%10=(3+n)%10)
+
+-- Test 11 - Two elements hash to the same bucket (0 and 10 both -> bucket 3)
+H10I0I10C0C10S2L20X
+
+-- Test 12 - Three elements collide in same bucket, all retrievable
+H10I0I10I20C0C10C20S3L30X
+
+-- Test 13 - Delete middle element of collision chain, verify head and tail unaffected
+H10I0I10I20R10C0D10C20S2L20X
+
+-- Test 14 - Delete head of collision chain (most recently inserted), verify rest unaffected
+H10I0I10I20R20C0C10D20S2L20X
+
+-- RESIZING & CAPACITY
+
+-- Test 15 - Insert exactly 7 elements into H10: load reaches 70 but does NOT trigger resize (70 is not > 70)
+H10I1I2I3I4I5I6I7S7L70X
+
+-- Test 16 - 8th insert triggers resize H10->H20; verify all elements accessible and load updated
+H10I1I2I3I4I5I6I7I8C1C2C3C4C5C6C7C8S8L40X
+
+-- Test 17 - Two consecutive resizes (H5 -> H10 -> H20); insert 8 elements total
+H5I1I2I3I4I5I6I7I8S8L40X
+
+-- Test 18 - Three consecutive resizes (H5 -> H10 -> H20 -> H40); insert 20 elements and verify all accessible
+H5I1I2I3I4I5I6I7I8I9I10I11I12I13I14I15I16I17I18I19I20C1C5C10C15C20S20L50X
+
+-- Test 19 - Remove element from post-resize table; verify size and load update correctly
+H10I1I2I3I4I5I6I7I8R4C1C2C3D4C5C6C7C8S7L35X
+
+-- DUPLICATE & EDGE INSERTIONS
+
+-- Test 20 - Insert same duplicate key 3 times; set size must stay at 1
+H10I5I5I5C5S1L10X
+
+-- Test 21 - Reinsert an element immediately after deleting it; must be findable again
+H10I5R5D5I5C5S1L10X
+
+-- Test 22 - Insert the value zero; verify it is treated as a valid element
+H10I0C0S1L10D1X
+
+-- Test 23 - Interleave duplicate inserts with new values; size reflects only unique elements
+H10I1I2I1I3I2I4I1C1C2C3C4S4L40X
+
+-- DELETION EDGE CASES
+
+-- Test 24 - Delete the tail element of a collision chain (earliest inserted), verify rest unaffected
+H10I0I10I20R0C10C20D0S2L20X
+
+-- Test 25 - Delete all inserted elements one by one; final state must be empty
+H10I1I2I3R1R2R3D1D2D3S0L0X
+
+-- Test 26 - Delete an element and immediately assert it is gone
+H10I42R42D42S0L0X
+
+-- Test 27 - Remove an element that was never inserted from an otherwise populated set
+H10I1I2I3R99C1C2C3D99S3L30X
+
+-- STRESS & PERFORMANCE
+
+-- Test 28 - Alternating inserts and removes; verify only surviving elements are present
+H10I1I2R1I3I4R2I5I6R3C4C5C6D1D2D3S3L30X
+
+-- Test 29 - Insert all elements, delete all elements, then re-insert different elements
+H10I1I2I3R3R2R1S0L0I4I5I6C4C5C6D1D2D3S3L30X
+
+-- Test 30 - Intermediate size and load assertions across a long sequence of operations
+H10I1I2I3S3L30I4I5I6S6L60I7I8S8L40C1C2C3C4C5C6C7C8X
+
+-- Test 31 - Insert many elements with multiple resizes, then spot-check several values
+H10I11I22I33I44I55I66I77I88I99I100C11C33C55C77C99S10L50X
+
+-- Test 32 - Mix of negative and positive values; verify both coexist correctly
+H10I-5I-10I5I10C-5C-10C5C10D0S4L40X

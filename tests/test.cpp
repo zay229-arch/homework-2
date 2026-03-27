@@ -35,6 +35,10 @@ int main()
     // getline advances the file stream by one line each call — no manual incrementing needed.
     while (std::getline(file, line))
     {
+        // Strip trailing \r so CRLF line endings don't break parsing on Linux
+        if (!line.empty() && line.back() == '\r')
+            line.pop_back();
+
         // Skip blank lines
         if (line.empty())
             continue;
