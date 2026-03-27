@@ -45,7 +45,7 @@ int main()
     auto start_lookup = std::chrono::high_resolution_clock::now();
     for (int val : testElements)
     {
-        // Find out if the hash set contains val.
+        hashSet.contains(val);
     }
     auto end_lookup = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> lookup_time = end_lookup - start_lookup;
