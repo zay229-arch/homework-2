@@ -186,4 +186,9 @@ void HashSet::rehash(size_t new_size)
             current = current->next;
         }
     }
+
+    // Free the old array's linked lists and the array itself
+    for (size_t i = 0; i < old_bucket_count; i++)
+        delete old_array[i];
+    delete[] old_array;
 }
