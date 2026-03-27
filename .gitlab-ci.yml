@@ -1,0 +1,15 @@
+# The Docker image that all jobs will run inside.
+# gcc:latest includes g++ and make, which is everything we need to build and test C++.
+image: gcc:latest
+
+# Stages define the phases of the pipeline in order.
+# Jobs in the same stage run in parallel; stages run sequentially.
+stages:
+  - test
+
+# This is the job. It belongs to the test stage and runs make test.
+# If make test exits with a non-zero code (i.e. any tests failed), the pipeline fails.
+run-tests:
+  stage: test
+  script:
+    - make test
