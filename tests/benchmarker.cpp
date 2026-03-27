@@ -58,10 +58,20 @@ int main()
             auto end_lookup = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> lookup_time = end_lookup - start_lookup;
 
+            // Measure removal time (remove present elements only)
+            auto start_remove = std::chrono::high_resolution_clock::now();
+            for (int i = 1; i <= N; ++i)
+            {
+                hashSet.remove(i);
+            }
+            auto end_remove = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> remove_time = end_remove - start_remove;
+
             // Output results
             std::cout << "Load Threshold: " << threshold << "% | N: " << N << "\n";
             std::cout << "  Insertion Time: " << insert_time.count() / N << " sec per element\n";
             std::cout << "  Lookup Time:    " << lookup_time.count() / testElements.size() << " sec per element\n";
+            std::cout << "  Remove Time:    " << remove_time.count() / N << " sec per element\n";
             std::cout << "  Memory Used:    " << (mem_after - mem_before) / 1024.0 << " MB\n";
             std::cout << "\n";
         }
