@@ -18,56 +18,86 @@ int main()
     std::vector<int> nValues = {500, 1000, 5000, 7000, 10000};
     std::vector<unsigned int> loadThresholds = {20, 70, 120};
 
+    // --- STL control: std::unordered_set ---
+    std::cout << "=== STL std::unordered_set ===\n\n";
+    for (int N : nValues)
+    {
+        std::unordered_set<int> hashSet;
+        std::vector<int> testElements;
+
+        size_t mem_before = get_memory_usage();
+
+        auto start_insert = std::chrono::high_resolution_clock::now();
+        for (int i = 1; i <= N; ++i)
+            hashSet.insert(i);
+        auto end_insert = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::nano> insert_time = end_insert - start_insert;
+
+        size_t mem_after = get_memory_usage();
+
+        for (int i = 1; i <= N / 2; ++i)
+            testElements.push_back(i);
+        for (int i = N + 1; i <= N + N / 2; ++i)
+            testElements.push_back(i);
+
+        auto start_lookup = std::chrono::high_resolution_clock::now();
+        for (int val : testElements)
+            hashSet.count(val);
+        auto end_lookup = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::nano> lookup_time = end_lookup - start_lookup;
+
+        auto start_remove = std::chrono::high_resolution_clock::now();
+        for (int i = 1; i <= N; ++i)
+            hashSet.erase(i);
+        auto end_remove = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::nano> remove_time = end_remove - start_remove;
+
+        std::cout << "N: " << N << "\n";
+        std::cout << "  Insertion Time: " << insert_time.count() / N << " ns per element\n";
+        std::cout << "  Lookup Time:    " << lookup_time.count() / testElements.size() << " ns per element\n";
+        std::cout << "  Remove Time:    " << remove_time.count() / N << " ns per element\n";
+        std::cout << "  Memory Used:    " << (mem_after - mem_before) / 1024.0 << " MB\n";
+        std::cout << "\n";
+    }
+
+    // --- Custom HashSet ---
+    std::cout << "=== Custom HashSet ===\n\n";
     for (unsigned int threshold : loadThresholds)
     {
         for (int N : nValues)
         {
-            // std::unordered_set<int> hashSet;
             HashSet hashSet(16);
             hashSet.set_load_threshold(threshold);
 
             std::vector<int> testElements;
 
-            // Measure memory before insertion
             size_t mem_before = get_memory_usage();
 
-            // Measure insertion time
             auto start_insert = std::chrono::high_resolution_clock::now();
             for (int i = 1; i <= N; ++i)
-            {
                 hashSet.insert(i);
-            }
             auto end_insert = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double, std::nano> insert_time = end_insert - start_insert;
 
-            // Measure memory after insertion
             size_t mem_after = get_memory_usage();
 
-            // Prepare test elements (half present, half absent)
             for (int i = 1; i <= N / 2; ++i)
-                testElements.push_back(i); // Present elements
+                testElements.push_back(i);
             for (int i = N + 1; i <= N + N / 2; ++i)
-                testElements.push_back(i); // Absent elements
+                testElements.push_back(i);
 
-            // Measure lookup time
             auto start_lookup = std::chrono::high_resolution_clock::now();
             for (int val : testElements)
-            {
                 hashSet.contains(val);
-            }
             auto end_lookup = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double, std::nano> lookup_time = end_lookup - start_lookup;
 
-            // Measure removal time (remove present elements only)
             auto start_remove = std::chrono::high_resolution_clock::now();
             for (int i = 1; i <= N; ++i)
-            {
                 hashSet.remove(i);
-            }
             auto end_remove = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double, std::nano> remove_time = end_remove - start_remove;
 
-            // Output results
             std::cout << "Load Threshold: " << threshold << "% | N: " << N << "\n";
             std::cout << "  Insertion Time: " << insert_time.count() / N << " ns per element\n";
             std::cout << "  Lookup Time:    " << lookup_time.count() / testElements.size() << " ns per element\n";
